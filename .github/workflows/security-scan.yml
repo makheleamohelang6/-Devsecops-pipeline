@@ -1,0 +1,29 @@
+---
+# Display name shown in the GitHub Actions UI
+name: DevSecOps Security Pipeline
+
+# Run on pushes to main, PRs targeting main, or manual trigger
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+
+jobs:
+  secret-scan:
+    name: Secret Scanning - Gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      # Clone the full Git history for comprehensive scanning
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Run Gitleaks to detect leaked secrets
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

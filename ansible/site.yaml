@@ -1,0 +1,21 @@
+---
+- name: Configure web server
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Download application package
+      ansible.builtin.get_url:
+        url: http://example.com/app/package.tar.gz
+        dest: /tmp/package.tar.gz
+        validate_certs: false
+
+    - name: Install httpd
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+        validate_certs: false
+
+    - name: Check application health
+      ansible.builtin.uri:
+        url: http://example.com/health
+        validate_certs: false
